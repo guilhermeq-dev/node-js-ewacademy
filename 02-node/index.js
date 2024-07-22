@@ -41,6 +41,31 @@ user.then((user) => {
   });
 });
 
+async function main() {
+    try {
+        console.time('promise');
+        const user = await getUser();
+    
+        const results = await Promise.all([getUserPhone(user.id), getUserAddress(user.id)]);
+    
+        const phone = results[0];
+        const address = results[1];
+    
+        console.log(
+            `
+            Nome: ${user.name},
+            Endereço: ${address.street}, ${address.number},
+            Telefone: (${phone.ddd}) ${phone.phone}
+            `
+        );
+        console.timeEnd('promise');
+    } catch (error) {
+        console.error('Error on get user data', error);
+    }
+}
+
+main();
+
 // getUser((error, user) => {
 //   if (error) {
 //     console.error("Error on get user", error);
